@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import "./App.css";
 import { schema } from "./constants/schema";
 import InputRenderer from "./components/InputRenderer";
+import { inputData } from "./constants/checkboxRadioSchema";
+import InputRendererTwo from "./components/InputRendererTwo";
 
 function App() {
   const initialState = () => {
@@ -12,7 +14,7 @@ function App() {
       );
     } else return {};
   };
-  
+
   const [fields, setFields] = useState<Record<string, string>>(initialState());
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -21,7 +23,6 @@ function App() {
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    console.log(fields);
     setFields(initialState());
   };
 
@@ -45,6 +46,20 @@ function App() {
         <button className="submit__button" type="submit">
           Submit
         </button>
+      </form>
+      <form>
+        {inputData.map((item) => (
+          <InputRendererTwo
+            mainId={item.id}
+            key={item.title}
+            elementToUse={item.multipleSelection.elementToUse}
+            title={item.title}
+            options={item.options}
+            multiSelection={item.multipleSelection.status}
+            required={item.required}
+            disabled={item.disabled}
+          />
+        ))}
       </form>
     </>
   );

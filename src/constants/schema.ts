@@ -7,11 +7,11 @@ type SchemaT = {
 export const schema :SchemaT = {
     fields: [
      {
-            name: "email",
-            type: "email",
-            placeholder: "Enter your email",
-            required: true,
-            disabled:true
+        name: "email",
+        type: "email",
+        placeholder: "Enter your email",
+        required: true,
+        disabled:true
      },
       {
         name: "username",
