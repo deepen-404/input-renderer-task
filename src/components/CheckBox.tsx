@@ -4,10 +4,11 @@ import { option } from "../constants/checkboxRadioSchema";
 type CheckBoxPropsT = {
   title: string;
   options: option[];
-  onChange: (value: string) => void;
+  onChange: (valueSent: string, mainId: string) => void;
   disabled: boolean;
   required: boolean;
   selectedValues: string[];
+  mainId: string;
 };
 
 const CheckBox: React.FC<CheckBoxPropsT> = ({
@@ -17,6 +18,7 @@ const CheckBox: React.FC<CheckBoxPropsT> = ({
   disabled = false,
   required = false,
   selectedValues,
+  mainId,
 }) => {
   return (
     <div>
@@ -31,7 +33,7 @@ const CheckBox: React.FC<CheckBoxPropsT> = ({
                 disabled={disabled}
                 type="checkbox"
                 value={opt.name}
-                onChange={(evt) => onChange(evt.target.value)}
+                onChange={(evt) => onChange(evt.target.value, mainId)}
               />
 
               <span style={{ opacity: disabled ? "0.5" : "1" }}>
