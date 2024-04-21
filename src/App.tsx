@@ -72,7 +72,6 @@ function App() {
     useState<CheckboxSelectedValuesType>(intialCheckboxState());
 
   const handleChangeCheckbox = (valueSent: string, mainId: string) => {
-
     const reqIndex = checkboxValues[mainId].findIndex(
       (item) => item === valueSent
     );
@@ -129,7 +128,7 @@ function App() {
                   options={item.options}
                   disabled={item.disabled}
                   required={item.required}
-                  onChange={(value) => handleChangeRadio(value, item.id)}
+                  onChange={handleChangeRadio}
                 />
               );
             }
@@ -143,7 +142,7 @@ function App() {
                   options={item.options}
                   disabled={item.disabled}
                   required={item.required}
-                  onChange={(value) => handleChangeRadio(value, item.id)}
+                  onChange={handleChangeRadio}
                 />
               );
             }
