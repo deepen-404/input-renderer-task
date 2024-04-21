@@ -35,6 +35,22 @@ export const inputData: checkBoxRadioSchemaT[] = [
       disabled: false,
     },
     {
+      id:"District",
+      title: "Select your district",
+      options: [
+          { id: "KTM", name: "Kathmandu" },
+          { id: "BKT", name: "Bhaktapur" },
+          { id: "LLT", name: "Lalitpur" },
+        { id: "JHP", name: "Jhapa" },
+      ],
+      multipleSelection: {
+        status: false,
+        elementToUse: "Select",
+      },
+      required:true,
+      disabled: false,
+    },
+    {
       id:"Fruits",
       title: "Choose some fruits",
       options: [
@@ -47,7 +63,7 @@ export const inputData: checkBoxRadioSchemaT[] = [
         status: true,
         elementToUse: "Checkbox",
       },
-      required:true,
+      required:false,
       disabled: false,
     },
     {
@@ -63,23 +79,7 @@ export const inputData: checkBoxRadioSchemaT[] = [
         status: true,
         elementToUse: "Checkbox",
       },
-      required:true,
-      disabled: false,
-    },
-    {
-      id:"District",
-      title: "Select your district",
-      options: [
-          { id: "KTM", name: "Kathmandu" },
-          { id: "BKT", name: "Bhaktapur" },
-          { id: "LLT", name: "Lalitpur" },
-        { id: "JHP", name: "Jhapa" },
-      ],
-      multipleSelection: {
-        status: false,
-        elementToUse: "Select",
-      },
-      required:true,
+      required:false,
       disabled: false,
     },
   ];

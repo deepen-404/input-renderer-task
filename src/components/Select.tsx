@@ -19,29 +19,8 @@ const Select: React.FC<SelectButtonPropsT> = ({
   selectedValue,
 }) => {
   return (
-    // <div>
-    //   <span>{title}</span>
-    //   <select
-    //     title={title}
-    //     onChange={(evt) => onChange(evt.target.value)}
-    //     required={required}
-    //     disabled={disabled}
-    //     defaultValue={options[0].name}
-    //     name={title}
-    //   >
-    //     {options.map((opt) => (
-    //       <option
-    //         key={opt.name}
-    //         selected={opt.name === selectedValue}
-    //         value={opt.name}
-    //       >
-    //         {opt.name}
-    //       </option>
-    //     ))}
-    //   </select>
-    // </div>
     <div>
-      <span>{title}</span>
+      <label style={{ display: "block" }}>{title}</label>
       <select
         title={title}
         onChange={(evt) => onChange(evt.target.value)}

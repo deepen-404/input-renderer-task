@@ -32,3 +32,7 @@ body {
   background-color: gray;
   color: beige;
 }
+
+select {
+  padding: 0.5rem;
+}

@@ -3,7 +3,16 @@ import "./App.css";
 import { schema } from "./constants/schema";
 import InputRenderer from "./components/InputRenderer";
 import { inputData } from "./constants/checkboxRadioSchema";
-import InputRendererTwo from "./components/InputRendererTwo";
+import CheckBox from "./components/CheckBox";
+import RadioButton from "./components/RadioButton";
+import Select from "./components/Select";
+
+type selectedValuesType = {
+  [key: string]: string;
+};
+type CheckboxSelectedValuesType = {
+  [key: string]: string[];
+};
 
 function App() {
   const initialState = () => {
@@ -15,22 +24,72 @@ function App() {
     } else return {};
   };
 
+  const initialRadioAndSelectState = () => {
+    if (inputData) {
+      return inputData
+        .filter((data) => data.multipleSelection.status === false)
+        .reduce(
+          (acc, curr) => ({ ...acc, [curr.id]: curr.options[0].name }),
+          {}
+        );
+    } else return {};
+  };
+
+  const intialCheckboxState = () => {
+    if (inputData) {
+      return inputData
+        .filter((data) => data.multipleSelection.status === true)
+        .reduce(
+          (acc, curr) => ({ ...acc, [curr.id]: [curr.options[0].name] }),
+          {}
+        );
+    } else return {};
+  };
+
   const [fields, setFields] = useState<Record<string, string>>(initialState());
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setFields({ ...fields, [event.target.name]: event.target.value });
   };
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
+  const handleReset = () => {
+    alert("Forms cleared to initial state!!");
     setFields(initialState());
+    setRadioAndSelectValues(initialRadioAndSelectState());
+    setCheckboxValues(intialCheckboxState());
   };
 
-  if (!schema) return <p>Schema not found</p>;
+  const [radioAndSelectValues, setRadioAndSelectValues] =
+    useState<selectedValuesType>(initialRadioAndSelectState());
+  const handleChangeRadio = (value: string, mainId: string) => {
+    setRadioAndSelectValues((prevValues) => ({
+      ...prevValues,
+      [mainId]: value,
+    }));
+  };
+
+  const [checkboxValues, setCheckboxValues] =
+    useState<CheckboxSelectedValuesType>(intialCheckboxState());
+
+  const handleChangeCheckbox = (valueSent: string, mainId: string) => {
+    const reqIndex = checkboxValues[mainId].findIndex(
+      (item) => item === valueSent
+    );
+    const updatedData = { ...checkboxValues };
+
+    if (reqIndex === -1) {
+      updatedData[mainId].push(valueSent);
+    } else {
+      updatedData[mainId] = updatedData[mainId].filter(
+        (item) => item !== valueSent
+      );
+    }
+    setCheckboxValues(updatedData);
+  };
 
   return (
     <>
-      <form className="form__container" onSubmit={handleSubmit}>
+      <form className="form__container" onReset={handleReset}>
         {schema.fields.map((field) => (
           <InputRenderer
             key={field.name}
@@ -43,23 +102,52 @@ function App() {
             type={field.type}
           />
         ))}
-        <button className="submit__button" type="submit">
-          Submit
+
+        {inputData.map((item) => {
+          if (item.multipleSelection.status) {
+            return (
+              <CheckBox
+                key={item.id}
+                selectedValues={checkboxValues[item.id]}
+                title={item.title}
+                options={item.options}
+                disabled={item.disabled}
+                required={item.required}
+                onChange={(evt) => handleChangeCheckbox(evt, item.id)}
+              />
+            );
+          } else {
+            if (item.multipleSelection.elementToUse === "RadioButton") {
+              return (
+                <RadioButton
+                  key={item.id}
+                  selectedValue={radioAndSelectValues[item.id]}
+                  title={item.title}
+                  options={item.options}
+                  disabled={item.disabled}
+                  required={item.required}
+                  onChange={(value) => handleChangeRadio(value, item.id)}
+                />
+              );
+            }
+            if (item.multipleSelection.elementToUse === "Select") {
+              return (
+                <Select
+                  key={item.id}
+                  selectedValue={radioAndSelectValues[item.id]}
+                  title={item.title}
+                  options={item.options}
+                  disabled={item.disabled}
+                  required={item.required}
+                  onChange={(value) => handleChangeRadio(value, item.id)}
+                />
+              );
+            }
+          }
+        })}
+        <button className="submit__button" type="reset">
+          Reset
         </button>
-      </form>
-      <form>
-        {inputData.map((item) => (
-          <InputRendererTwo
-            mainId={item.id}
-            key={item.title}
-            elementToUse={item.multipleSelection.elementToUse}
-            title={item.title}
-            options={item.options}
-            multiSelection={item.multipleSelection.status}
-            required={item.required}
-            disabled={item.disabled}
-          />
-        ))}
       </form>
     </>
   );
