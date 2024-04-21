@@ -9,24 +9,32 @@ import Select from "./components/Select";
 
 function App() {
   const initialState = () => {
-    if (schema) {
-      return schema.fields.reduce(
-        (obj, field) => ({ ...obj, [field.name]: "" }),
-        {}
-      );
-    } else return {};
+    const stateOne = schema.fields.reduce(
+      (obj, field) => ({ ...obj, [field.name]: "" }),
+      {}
+    );
+    const stateTwo = inputData.reduce(
+      (obj, item) => ({ ...obj, [item.id]: "" }),
+      {}
+    );
+    const finalState = { ...stateOne, ...stateTwo };
+    return finalState;
   };
 
   const [fields, setFields] = useState<Record<string, string>>(initialState());
+
+  const fieldUpdater = (id: string, value: string) => {
+    setFields({ ...fields, [id]: value });
+  };
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setFields({ ...fields, [event.target.name]: event.target.value });
   };
 
   const handleReset = () => {
-    alert("Forms cleared to initial state!!");
     setFields(initialState());
   };
+
 
   return (
     <>
@@ -48,6 +56,8 @@ function App() {
           if (item.multipleSelection.status) {
             return (
               <CheckBox
+                id={item.id}
+                fieldUpdater={fieldUpdater}
                 key={item.id}
                 title={item.title}
                 options={item.options}
@@ -59,6 +69,8 @@ function App() {
             if (item.multipleSelection.elementToUse === "RadioButton") {
               return (
                 <RadioButton
+                  id={item.id}
+                  fieldUpdater={fieldUpdater}
                   key={item.id}
                   title={item.title}
                   options={item.options}
@@ -70,6 +82,8 @@ function App() {
             if (item.multipleSelection.elementToUse === "Select") {
               return (
                 <Select
+                  id={item.id}
+                  fieldUpdater={fieldUpdater}
                   key={item.id}
                   title={item.title}
                   options={item.options}

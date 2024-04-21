@@ -6,6 +6,8 @@ type CheckBoxPropsT = {
   options: option[];
   disabled: boolean;
   required: boolean;
+  fieldUpdater: (id: string, value: string) => void;
+  id: string;
 };
 
 const CheckBox: React.FC<CheckBoxPropsT> = ({
@@ -13,10 +15,10 @@ const CheckBox: React.FC<CheckBoxPropsT> = ({
   title,
   disabled = false,
   required = false,
+  fieldUpdater,
+  id,
 }) => {
-  const [checkboxValue, setCheckboxValue] = useState<string[]>([
-    options[0].name,
-  ]);
+  const [checkboxValue, setCheckboxValue] = useState<string[]>([]);
 
   const handleChangeCheckbox = (valueSent: string) => {
     const reqIndex = checkboxValue.findIndex((item) => item === valueSent);
@@ -27,8 +29,8 @@ const CheckBox: React.FC<CheckBoxPropsT> = ({
       updatedData = updatedData.filter((item) => item !== valueSent);
     }
     setCheckboxValue(updatedData);
+    fieldUpdater(id, JSON.stringify(updatedData));
   };
-  console.log(checkboxValue);
 
   return (
     <div>

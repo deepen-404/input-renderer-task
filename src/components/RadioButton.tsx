@@ -6,6 +6,8 @@ type RadioButtonPropsT = {
   options: option[];
   disabled: boolean;
   required: boolean;
+  fieldUpdater: (id: string, value: string) => void;
+  id: string;
 };
 
 const RadioButton: React.FC<RadioButtonPropsT> = ({
@@ -13,11 +15,14 @@ const RadioButton: React.FC<RadioButtonPropsT> = ({
   title,
   disabled = false,
   required = false,
+  fieldUpdater,
+  id,
 }) => {
   const [radioValue, setRadioValue] = useState<string>("");
 
   const handleChangeRadio = (value: string) => {
     setRadioValue(value);
+    fieldUpdater(id, value);
   };
 
   return (

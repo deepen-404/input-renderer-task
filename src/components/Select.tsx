@@ -6,6 +6,8 @@ type SelectButtonPropsT = {
   options: option[];
   disabled: boolean;
   required: boolean;
+  fieldUpdater: (id: string, value: string) => void;
+  id: string;
 };
 
 const Select: React.FC<SelectButtonPropsT> = ({
@@ -13,11 +15,14 @@ const Select: React.FC<SelectButtonPropsT> = ({
   title,
   disabled = false,
   required = false,
+  fieldUpdater,
+  id,
 }) => {
   const [selectValue, setSelectValue] = useState<string>("");
 
   const handleChangeSelect = (value: string) => {
     setSelectValue(value);
+    fieldUpdater(id, value);
   };
   return (
     <div>
@@ -30,6 +35,7 @@ const Select: React.FC<SelectButtonPropsT> = ({
         value={selectValue}
         name={title}
       >
+        <option value="">Select District</option>
         {options.map((opt) => (
           <option key={opt.name} value={opt.name}>
             {opt.name}
