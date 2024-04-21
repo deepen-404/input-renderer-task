@@ -1,8 +1,6 @@
 import React, { useState } from "react";
 import RadioButton from "./RadioButton";
 import { inputData, option } from "../constants/checkboxRadioSchema";
-import Select from "./Select";
-import CheckBox from "./CheckBox";
 
 type InputRendererTwoPropsT = {
   elementToUse: "Checkbox" | "Select" | "RadioButton";
@@ -26,12 +24,9 @@ const InputRendererTwo: React.FC<InputRendererTwoPropsT> = ({
   type selectedValuesType = {
     [key: string]: string;
   };
-  type CheckboxSelectedValuesType = {
-    [key: string]: string[];
-  };
 
   const [radioAndSelectValues, setRadioAndSelectValues] =
-    useState<selectedValuesType>(
+    useState<selectedValuesType>(() =>
       inputData
         .filter((data) => data.multipleSelection.status === false)
         .reduce(
@@ -40,39 +35,11 @@ const InputRendererTwo: React.FC<InputRendererTwoPropsT> = ({
         )
     );
   const handleChange = (value: string, mainId: string) => {
-    if (mainId === "") {
-      return;
-    }
-    setRadioAndSelectValues((prevValues) => ({
-      ...prevValues,
-      [mainId]: value,
-    }));
-  };
-
-  const [checkboxValues, setCheckboxValues] =
-    useState<CheckboxSelectedValuesType>(
-      inputData
-        .filter((data) => data.multipleSelection.status === true)
-        .reduce(
-          (acc, curr) => ({ ...acc, [curr.id]: [curr.options[0].name] }),
-          {}
-        )
-    );
-
-  const handleChangeCheckbox = (valueSent: string, mainId: string) => {
-    const reqIndex = checkboxValues[mainId].findIndex(
-      (item) => item === valueSent
-    );
-    const updatedData = { ...checkboxValues };
-
-    if (reqIndex === -1) {
-      updatedData[mainId].push(valueSent);
-    } else {
-      updatedData[mainId] = updatedData[mainId].filter(
-        (item) => item !== valueSent
-      );
-    }
-    setCheckboxValues(updatedData);
+    console.log(`value: ${value}, id: ${mainId}`);
+    console.log("previous data: ", radioAndSelectValues);
+    const updatedData = { ...radioAndSelectValues, [mainId]: value };
+    console.log("updated data: ", updatedData);
+    setRadioAndSelectValues(updatedData);
   };
 
   return (
@@ -85,26 +52,6 @@ const InputRendererTwo: React.FC<InputRendererTwoPropsT> = ({
           disabled={disabled}
           required={required}
           onChange={(value) => handleChange(value, mainId)}
-        />
-      )}
-      {!multiSelection && elementToUse === "Select" && (
-        <Select
-          selectedValue={radioAndSelectValues[mainId]}
-          title={title}
-          options={options}
-          disabled={disabled}
-          required={required}
-          onChange={(value) => handleChange(value, mainId)}
-        />
-      )}
-      {multiSelection && elementToUse === "Checkbox" && (
-        <CheckBox
-          selectedValues={checkboxValues[mainId]}
-          title={title}
-          options={options}
-          disabled={disabled}
-          required={required}
-          onChange={(evt) => handleChangeCheckbox(evt, mainId)}
         />
       )}
     </div>

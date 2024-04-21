@@ -18,6 +18,8 @@ const RadioButton: React.FC<RadioButtonPropsT> = ({
   required = false,
   selectedValue,
 }) => {
+  console.log(`component with "${title}" re-rendered`);
+
   return (
     <div>
       <label>

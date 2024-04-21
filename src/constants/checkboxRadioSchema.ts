@@ -77,7 +77,7 @@ export const inputData: checkBoxRadioSchemaT[] = [
       ],
       multipleSelection: {
         status: false,
-        elementToUse: "Select",
+        elementToUse: "RadioButton",
       },
       required:true,
       disabled: false,
