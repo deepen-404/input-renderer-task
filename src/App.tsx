@@ -7,13 +7,6 @@ import CheckBox from "./components/CheckBox";
 import RadioButton from "./components/RadioButton";
 import Select from "./components/Select";
 
-type selectedValuesType = {
-  [key: string]: string;
-};
-type CheckboxSelectedValuesType = {
-  [key: string]: string[];
-};
-
 function App() {
   const initialState = () => {
     if (schema) {
@@ -21,28 +14,6 @@ function App() {
         (obj, field) => ({ ...obj, [field.name]: "" }),
         {}
       );
-    } else return {};
-  };
-
-  const initialRadioAndSelectState = () => {
-    if (inputData) {
-      return inputData
-        .filter((data) => data.multipleSelection.status === false)
-        .reduce(
-          (acc, curr) => ({ ...acc, [curr.id]: curr.options[0].name }),
-          {}
-        );
-    } else return {};
-  };
-
-  const intialCheckboxState = () => {
-    if (inputData) {
-      return inputData
-        .filter((data) => data.multipleSelection.status === true)
-        .reduce(
-          (acc, curr) => ({ ...acc, [curr.id]: [curr.options[0].name] }),
-          {}
-        );
     } else return {};
   };
 
@@ -55,36 +26,6 @@ function App() {
   const handleReset = () => {
     alert("Forms cleared to initial state!!");
     setFields(initialState());
-    setRadioAndSelectValues(initialRadioAndSelectState());
-    setCheckboxValues(intialCheckboxState());
-  };
-
-  const [radioAndSelectValues, setRadioAndSelectValues] =
-    useState<selectedValuesType>(initialRadioAndSelectState());
-  const handleChangeRadio = (value: string, mainId: string) => {
-    setRadioAndSelectValues((prevValues) => ({
-      ...prevValues,
-      [mainId]: value,
-    }));
-  };
-
-  const [checkboxValues, setCheckboxValues] =
-    useState<CheckboxSelectedValuesType>(intialCheckboxState());
-
-  const handleChangeCheckbox = (valueSent: string, mainId: string) => {
-    const reqIndex = checkboxValues[mainId].findIndex(
-      (item) => item === valueSent
-    );
-    const updatedData = { ...checkboxValues };
-
-    if (reqIndex === -1) {
-      updatedData[mainId].push(valueSent);
-    } else {
-      updatedData[mainId] = updatedData[mainId].filter(
-        (item) => item !== valueSent
-      );
-    }
-    setCheckboxValues(updatedData);
   };
 
   return (
@@ -108,13 +49,10 @@ function App() {
             return (
               <CheckBox
                 key={item.id}
-                mainId={item.id}
-                selectedValues={checkboxValues[item.id]}
                 title={item.title}
                 options={item.options}
                 disabled={item.disabled}
                 required={item.required}
-                onChange={handleChangeCheckbox}
               />
             );
           } else {
@@ -122,13 +60,10 @@ function App() {
               return (
                 <RadioButton
                   key={item.id}
-                  mainId={item.id}
-                  selectedValue={radioAndSelectValues[item.id]}
                   title={item.title}
                   options={item.options}
                   disabled={item.disabled}
                   required={item.required}
-                  onChange={handleChangeRadio}
                 />
               );
             }
@@ -136,13 +71,10 @@ function App() {
               return (
                 <Select
                   key={item.id}
-                  mainId={item.id}
-                  selectedValue={radioAndSelectValues[item.id]}
                   title={item.title}
                   options={item.options}
                   disabled={item.disabled}
                   required={item.required}
-                  onChange={handleChangeRadio}
                 />
               );
             }

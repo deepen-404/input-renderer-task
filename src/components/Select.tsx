@@ -1,34 +1,33 @@
-import React from "react";
+import React, { useState } from "react";
 import { option } from "../constants/checkboxRadioSchema";
 
 type SelectButtonPropsT = {
   title: string;
   options: option[];
-  onChange: (valueSent: string, mainId: string) => void;
   disabled: boolean;
   required: boolean;
-  selectedValue: string;
-  mainId: string;
 };
 
 const Select: React.FC<SelectButtonPropsT> = ({
-  onChange,
   options,
   title,
   disabled = false,
   required = false,
-  selectedValue,
-  mainId,
 }) => {
+  const [selectValue, setSelectValue] = useState<string>("");
+
+  const handleChangeSelect = (value: string) => {
+    setSelectValue(value);
+  };
   return (
     <div>
       <label style={{ display: "block" }}>{title}</label>
       <select
         title={title}
-        onChange={(evt) => onChange(evt.target.value, mainId)}
+        onChange={(evt) => handleChangeSelect(evt.target.value)}
         required={required}
         disabled={disabled}
-        value={selectedValue}
+        value={selectValue}
         name={title}
       >
         {options.map((opt) => (
