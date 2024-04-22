@@ -8,32 +8,45 @@ import RadioButton from "./components/RadioButton";
 import Select from "./components/Select";
 
 function App() {
-  const initialState = () => {
-    const stateOne = schema.fields.reduce(
-      (obj, field) => ({ ...obj, [field.name]: "" }),
-      {}
-    );
-    const stateTwo = inputData.reduce(
-      (obj, item) => ({ ...obj, [item.id]: "" }),
-      {}
-    );
-    const finalState = { ...stateOne, ...stateTwo };
-    return finalState;
-  };
+  // const initialState = () => {
+  //   const stateOne = schema.fields.reduce(
+  //     (obj, field) => ({ ...obj, [field.name]: "" }),
+  //     {}
+  //   );
+  //   const stateTwo = inputData.reduce(
+  //     (obj, item) => ({ ...obj, [item.id]: "" }),
+  //     {}
+  //   );
+  //   const finalState = { ...stateOne, ...stateTwo };
+  //   console.log(finalState);
+  //   return finalState;
+  // };
 
-  const [fields, setFields] = useState<Record<string, string>>(initialState());
+  const [fields, setFields] = useState<Record<string, string>>({
+    email: "",
+    username: "",
+    password: "",
+    date: "",
+    Role: "",
+    District: "",
+    Fruits: "",
+    Groceries: "",
+  });
 
   const fieldUpdater = (id: string, value: string) => {
     setFields({ ...fields, [id]: value });
   };
 
-  const handleReset = () => {
-    setFields(initialState());
-  };
+  // const handleReset = () => {
+  //   setFields(initialState());
+  // };
 
   return (
     <>
-      <form className="form__container" onReset={handleReset}>
+      <form
+        className="form__container"
+        //  onReset={handleReset}
+      >
         {schema.fields.map((field) => (
           <InputRenderer
             fieldUpdater={fieldUpdater}
