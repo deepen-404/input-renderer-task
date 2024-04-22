@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import "./App.css";
 import { schema } from "./constants/schema";
 import InputRenderer from "./components/InputRenderer";
@@ -27,24 +27,19 @@ function App() {
     setFields({ ...fields, [id]: value });
   };
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setFields({ ...fields, [event.target.name]: event.target.value });
-  };
-
   const handleReset = () => {
     setFields(initialState());
   };
-
 
   return (
     <>
       <form className="form__container" onReset={handleReset}>
         {schema.fields.map((field) => (
           <InputRenderer
+            fieldUpdater={fieldUpdater}
             key={field.name}
             disabled={field.disabled}
             name={field.name}
-            onChange={handleChange}
             placeholder={field.placeholder}
             required={field.required}
             value={fields[field.name]}

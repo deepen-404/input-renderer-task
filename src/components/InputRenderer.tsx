@@ -3,7 +3,7 @@ type InputRendererPropsT = {
   placeholder: string;
   required: boolean;
   disabled: boolean;
-  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  fieldUpdater: (id: string, value: string) => void
   value: string;
   name: string;
 };
@@ -13,9 +13,9 @@ const InputRenderer: React.FC<InputRendererPropsT> = ({
   placeholder = "Enter a text",
   required = false,
   disabled = false,
-  onChange,
   value,
   name = "",
+  fieldUpdater
 }) => {
   return (
     <div>
@@ -30,7 +30,7 @@ const InputRenderer: React.FC<InputRendererPropsT> = ({
           required={required}
           disabled={disabled}
           value={value}
-          onChange={(evt) => onChange(evt)}
+          onChange={(evt) => fieldUpdater(evt.target.name, evt.target.value)}
         />
       </label>
     </div>
