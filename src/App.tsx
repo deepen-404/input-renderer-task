@@ -23,9 +23,9 @@ function App() {
   // };
 
   const [fields, setFields] = useState<Record<string, string>>({
-    email: "",
-    username: "",
-    password: "",
+    email: "new email",
+    username: "username",
+    password: "password",
     date: "",
     Role: "",
     District: "",
@@ -37,16 +37,9 @@ function App() {
     setFields({ ...fields, [id]: value });
   };
 
-  // const handleReset = () => {
-  //   setFields(initialState());
-  // };
-
   return (
     <>
-      <form
-        className="form__container"
-        //  onReset={handleReset}
-      >
+      <form className="form__container">
         {schema.fields.map((field) => (
           <InputRenderer
             fieldUpdater={fieldUpdater}
