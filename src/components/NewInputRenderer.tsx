@@ -34,7 +34,7 @@ const NewInputRenderer = () => {
     gender: "male",
     age: "2",
     country: "",
-    techStack: [],
+    techStack: ["react"],
   });
 
   const handleInputChange = (name: string, value: string, type?: string) => {
@@ -52,7 +52,8 @@ const NewInputRenderer = () => {
     }
   };
 
-  console.log(JSON.parse(JSON.stringify(formInputs)));
+  // problem with JS, it shows the nested arrays with stringyfying the formInputs
+  console.log(JSON.stringify(formInputs));
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
