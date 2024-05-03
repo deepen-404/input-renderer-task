@@ -37,22 +37,11 @@ const NewInputRenderer = () => {
     techStack: ["react"],
   });
 
-  const handleInputChange = (name: string, value: string, type?: string) => {
-    if (type !== "checkbox") {
-      setFormInputs({ ...formInputs, [name]: value });
-    } else {
-      setFormInputs((prev) => {
-        const checkBoxItem = prev[name] || [];
-        const updatedValue =
-          Array.isArray(checkBoxItem) && checkBoxItem.includes(value)
-            ? checkBoxItem.filter((item) => item !== value)
-            : [...checkBoxItem, value];
-        return { ...prev, [name]: updatedValue };
-      });
-    }
+  const handleInputChange = (name: string, value: string | string[]) => {
+    setFormInputs({ ...formInputs, [name]: value });
   };
 
-  // problem with JS, it shows the nested arrays with stringyfying the formInputs
+  // problem with JS, it shows the nested arrays without stringyfying the formInputs
   console.log(JSON.stringify(formInputs));
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -67,6 +56,17 @@ const NewInputRenderer = () => {
       country: "",
       techStack: [],
     });
+  };
+
+  const handleCheckbox = (value: string, name: string): string[] => {
+    const formInputsCopy = formInputs;
+    const requiredItem = formInputsCopy[name];
+    if (Array.isArray(requiredItem)) {
+      return requiredItem.includes(value)
+        ? requiredItem.filter((item) => item != value)
+        : [...requiredItem, value];
+    }
+    return [];
   };
 
   return (
@@ -89,9 +89,9 @@ const NewInputRenderer = () => {
                 type={item.type}
                 name={item.name}
                 value={formInputs[item.name]}
-                onChange={(e) =>
-                  handleInputChange(e.target.name, e.target.value, item.type)
-                }
+                onChange={(e) => {
+                  handleInputChange(e.target.name, e.target.value);
+                }}
                 required={item.rules?.required ?? true}
                 disabled={item.rules?.disabled ?? false}
               />
@@ -108,11 +108,11 @@ const NewInputRenderer = () => {
                     name={item.name}
                     value={option.value}
                     onChange={(e) => {
-                      handleInputChange(
-                        e.target.name,
+                      const updatedValue = handleCheckbox(
                         e.target.value,
-                        item.type
+                        e.target.name
                       );
+                      handleInputChange(e.target.name, updatedValue);
                     }}
                     checked={formInputs[item.name].includes(option?.value)}
                   />
@@ -132,11 +132,7 @@ const NewInputRenderer = () => {
                     name={item.name}
                     value={option.value}
                     onChange={(e) => {
-                      handleInputChange(
-                        e.target.name,
-                        e.target.value,
-                        item.type
-                      );
+                      handleInputChange(e.target.name, e.target.value);
                     }}
                     checked={formInputs[item.name] === option?.value}
                   />
@@ -152,9 +148,7 @@ const NewInputRenderer = () => {
               <select
                 name={item.name}
                 value={formInputs[item.name] || ""}
-                onChange={(e) =>
-                  handleInputChange(item.name, e.target.value, item.type)
-                }
+                onChange={(e) => handleInputChange(item.name, e.target.value)}
               >
                 {item.options?.map((option) => (
                   <option key={option.value} value={option.value}>
