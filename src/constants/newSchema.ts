@@ -1,15 +1,23 @@
-type FormField = {
+
+export type  RulesT = {
+    required: boolean;
+    disabled: boolean;
+}
+
+export type OptionsT = {
+  value: string;
+  label: string;
+};
+
+export type FormField = {
     name: string;
     label: string;
     defaultValue?:string ;
     multipleDefaultValue?:string[]
     placeholder?:string;
     type: "text" | "number" | "email" | "radio" | "select" | "checkbox";
-    rules?: {
-        required: boolean;
-        disabled: boolean;
-    }
-    options?: { value: string; label: string }[];
+    rules?: RulesT
+    options?: OptionsT[];
   };
   
   type FormDataT = FormField[];

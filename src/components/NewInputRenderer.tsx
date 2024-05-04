@@ -1,5 +1,11 @@
 import { useState } from "react";
 import formData from "../constants/newSchema";
+import SimpleInput from "./SimpleInput";
+import CheckBox from "./CheckBox";
+import RadioButton from "./RadioButton";
+import Select from "./Select";
+
+export type FormInputsT = Record<string, string | string[]>;
 
 const NewInputRenderer = () => {
   /* 
@@ -25,9 +31,7 @@ const NewInputRenderer = () => {
   /*
     SECOND APPROACH to insert the default value by the programmer
   */
-  const [formInputs, setFormInputs] = useState<
-    Record<string, string | string[]>
-  >({
+  const [formInputs, setFormInputs] = useState<FormInputsT>({
     email: "email",
     firstName: "fname",
     lastName: "lastname",
@@ -37,9 +41,8 @@ const NewInputRenderer = () => {
     techStack: ["react"],
   });
 
-  const handleInputChange = (name: string, value: string | string[]) => {
+  const handleInputChange = (name: string, value: string | string[]) =>
     setFormInputs({ ...formInputs, [name]: value });
-  };
 
   // problem with JS, it shows the nested arrays without stringyfying the formInputs
   console.log(JSON.stringify(formInputs));
@@ -58,17 +61,6 @@ const NewInputRenderer = () => {
     });
   };
 
-  const handleCheckbox = (value: string, name: string): string[] => {
-    const formInputsCopy = formInputs;
-    const requiredItem = formInputsCopy[name];
-    if (Array.isArray(requiredItem)) {
-      return requiredItem.includes(value)
-        ? requiredItem.filter((item) => item != value)
-        : [...requiredItem, value];
-    }
-    return [];
-  };
-
   return (
     <form onSubmit={(e) => handleSubmit(e)}>
       {formData.map((item) => {
@@ -78,85 +70,38 @@ const NewInputRenderer = () => {
           item.type === "number"
         ) {
           return (
-            <div style={{ marginBlock: "0.5rem" }} key={item.name}>
-              <label style={{ display: "block" }} htmlFor={item.name}>
-                {item.rules?.required && (
-                  <span style={{ color: "red" }}>*</span>
-                )}
-                {item.label}:
-              </label>
-              <input
-                type={item.type}
-                name={item.name}
-                value={formInputs[item.name]}
-                onChange={(e) => {
-                  handleInputChange(e.target.name, e.target.value);
-                }}
-                required={item.rules?.required ?? true}
-                disabled={item.rules?.disabled ?? false}
-              />
-            </div>
+            <SimpleInput
+              key={item.name}
+              {...item}
+              formInputs={formInputs}
+              handleInputChange={handleInputChange}
+            />
           );
         } else if (item.type === "checkbox") {
           return (
-            <div key={item.name}>
-              <label>{item.label}:</label>
-              {item.options?.map((option) => (
-                <div key={option.value}>
-                  <input
-                    type={item.type}
-                    name={item.name}
-                    value={option.value}
-                    onChange={(e) => {
-                      const updatedValue = handleCheckbox(
-                        e.target.value,
-                        e.target.name
-                      );
-                      handleInputChange(e.target.name, updatedValue);
-                    }}
-                    checked={formInputs[item.name].includes(option?.value)}
-                  />
-                  {option.label}
-                </div>
-              ))}
-            </div>
+            <CheckBox
+              key={item.name}
+              {...item}
+              formInputs={formInputs}
+              handleInputChange={handleInputChange}
+            />
           );
         } else if (item.type === "radio") {
           return (
-            <div key={item.name}>
-              <label>{item.label}:</label>
-              {item.options?.map((option) => (
-                <div key={option.value}>
-                  <input
-                    type={item.type}
-                    name={item.name}
-                    value={option.value}
-                    onChange={(e) => {
-                      handleInputChange(e.target.name, e.target.value);
-                    }}
-                    checked={formInputs[item.name] === option?.value}
-                  />
-                  {option.label}
-                </div>
-              ))}
-            </div>
+            <RadioButton
+              key={item.name}
+              {...item}
+              formInputs={formInputs}
+              handleInputChange={handleInputChange}
+            />
           );
         } else if (item.type === "select") {
           return (
-            <div key={item.name}>
-              <label>{item.label}:</label>
-              <select
-                name={item.name}
-                value={formInputs[item.name] || ""}
-                onChange={(e) => handleInputChange(item.name, e.target.value)}
-              >
-                {item.options?.map((option) => (
-                  <option key={option.value} value={option.value}>
-                    {option.label}
-                  </option>
-                ))}
-              </select>
-            </div>
+            <Select
+              {...item}
+              formInputs={formInputs}
+              handleInputChange={handleInputChange}
+            />
           );
         }
       })}
