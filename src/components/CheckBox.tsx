@@ -1,40 +1,40 @@
 import { InputPropsT } from "../types/InputPropsT";
 
 const CheckBox = ({
-  formInputs,
   handleInputChange,
   name,
   label,
   options,
   type,
+  value: values,
 }: InputPropsT) => {
-  const handleCheckbox = (value: string, name: string): string[] => {
-    const formInputsCopy = formInputs;
-    const requiredItem = formInputsCopy[name];
-    if (Array.isArray(requiredItem)) {
-      return requiredItem.includes(value)
-        ? requiredItem.filter((item) => item != value)
-        : [...requiredItem, value];
+  const handleCheckbox = (value: string): string[] => {
+    const existingValues = values || [];
+    const isChecked = existingValues.includes(value);
+    if (Array.isArray(existingValues)) {
+      if (isChecked) {
+        return existingValues.filter((item) => item !== value);
+      } else {
+        return [...existingValues, value];
+      }
     }
     return [];
   };
   return (
     <div key={name}>
-      <label>{label}:</label>
+      <label htmlFor={name}>{label}:</label>
       {options?.map((option) => (
         <div key={option.value}>
           <input
+            id={option.label}
             type={type}
             name={name}
             value={option.value}
             onChange={(e) => {
-              const updatedValue = handleCheckbox(
-                e.target.value,
-                e.target.name
-              );
+              const updatedValue = handleCheckbox(e.target.value);
               handleInputChange(e.target.name, updatedValue);
             }}
-            checked={formInputs[name].includes(option?.value)}
+            checked={values.includes(option?.value)}
           />
           {option.label}
         </div>

@@ -1,18 +1,18 @@
 import { InputPropsT } from "../types/InputPropsT";
 
 const Select = ({
-  formInputs,
   handleInputChange,
   name,
   label,
   options,
+  value,
 }: InputPropsT) => {
   return (
     <div key={name}>
       <label>{label}:</label>
       <select
         name={name}
-        value={formInputs[name] || ""}
+        value={value}
         onChange={(e) => handleInputChange(name, e.target.value)}
       >
         {options?.map((option) => (

@@ -64,45 +64,24 @@ const NewInputRenderer = () => {
   return (
     <form onSubmit={(e) => handleSubmit(e)}>
       {formData.map((item) => {
+        const commonProps = {
+          ...item,
+          key: item.name,
+          value: formInputs[item.name],
+          handleInputChange,
+        };
         if (
           item.type === "email" ||
           item.type === "text" ||
           item.type === "number"
         ) {
-          return (
-            <SimpleInput
-              key={item.name}
-              {...item}
-              formInputs={formInputs}
-              handleInputChange={handleInputChange}
-            />
-          );
+          return <SimpleInput {...commonProps} />;
         } else if (item.type === "checkbox") {
-          return (
-            <CheckBox
-              key={item.name}
-              {...item}
-              formInputs={formInputs}
-              handleInputChange={handleInputChange}
-            />
-          );
+          return <CheckBox {...commonProps} />;
         } else if (item.type === "radio") {
-          return (
-            <RadioButton
-              key={item.name}
-              {...item}
-              formInputs={formInputs}
-              handleInputChange={handleInputChange}
-            />
-          );
+          return <RadioButton {...commonProps} />;
         } else if (item.type === "select") {
-          return (
-            <Select
-              {...item}
-              formInputs={formInputs}
-              handleInputChange={handleInputChange}
-            />
-          );
+          return <Select {...commonProps} />;
         }
       })}
       <button type="submit">Submit</button>

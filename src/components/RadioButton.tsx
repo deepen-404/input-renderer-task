@@ -1,12 +1,12 @@
 import { InputPropsT } from "../types/InputPropsT";
 
 const RadioButton = ({
-  formInputs,
   handleInputChange,
   name,
   label,
   options,
   type,
+  value,
 }: InputPropsT) => {
   return (
     <div key={name}>
@@ -20,7 +20,7 @@ const RadioButton = ({
             onChange={(e) => {
               handleInputChange(e.target.name, e.target.value);
             }}
-            checked={formInputs[name] === option?.value}
+            checked={value === option?.value}
           />
           {option.label}
         </div>

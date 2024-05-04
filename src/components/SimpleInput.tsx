@@ -5,7 +5,7 @@ const SimpleInput = ({
   type,
   label,
   rules,
-  formInputs,
+  value,
   handleInputChange,
 }: InputPropsT) => {
   return (
@@ -17,7 +17,7 @@ const SimpleInput = ({
       <input
         type={type}
         name={name}
-        value={formInputs[name]}
+        value={value}
         onChange={(e) => {
           handleInputChange(e.target.name, e.target.value);
         }}
