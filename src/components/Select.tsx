@@ -1,4 +1,5 @@
 import { InputPropsT } from "../types/InputPropsT";
+import ErrorText from "./ErrorText";
 
 const Select = ({
   handleInputChange,
@@ -6,6 +7,7 @@ const Select = ({
   label,
   options,
   value,
+  error,
 }: InputPropsT) => {
   return (
     <div key={name}>
@@ -21,6 +23,7 @@ const Select = ({
           </option>
         ))}
       </select>
+      {error && <ErrorText error={error} />}
     </div>
   );
 };

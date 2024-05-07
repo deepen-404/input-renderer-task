@@ -1,4 +1,5 @@
 import { InputPropsT } from "../types/InputPropsT";
+import ErrorText from "./ErrorText";
 
 const CheckBox = ({
   handleInputChange,
@@ -7,6 +8,7 @@ const CheckBox = ({
   options,
   type,
   value: values,
+  error,
 }: InputPropsT) => {
   const handleCheckbox = (value: string): string[] => {
     const existingValues = values || [];
@@ -39,6 +41,7 @@ const CheckBox = ({
           {option.label}
         </div>
       ))}
+      {error && <ErrorText error={error} />}
     </div>
   );
 };

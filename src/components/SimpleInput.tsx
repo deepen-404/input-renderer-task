@@ -1,4 +1,5 @@
 import { InputPropsT } from "../types/InputPropsT";
+import ErrorText from "./ErrorText";
 
 const SimpleInput = ({
   name,
@@ -7,6 +8,7 @@ const SimpleInput = ({
   rules,
   value,
   handleInputChange,
+  error,
 }: InputPropsT) => {
   return (
     <div style={{ marginBlock: "0.5rem" }} key={name}>
@@ -21,9 +23,9 @@ const SimpleInput = ({
         onChange={(e) => {
           handleInputChange(e.target.name, e.target.value);
         }}
-        required={rules?.required ?? true}
         disabled={rules?.disabled ?? false}
       />
+      {error && <ErrorText error={error} />}
     </div>
   );
 };

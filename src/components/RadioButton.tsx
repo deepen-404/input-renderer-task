@@ -1,4 +1,5 @@
 import { InputPropsT } from "../types/InputPropsT";
+import ErrorText from "./ErrorText";
 
 const RadioButton = ({
   handleInputChange,
@@ -7,6 +8,7 @@ const RadioButton = ({
   options,
   type,
   value,
+  error,
 }: InputPropsT) => {
   return (
     <div key={name}>
@@ -23,6 +25,7 @@ const RadioButton = ({
             checked={value === option?.value}
           />
           {option.label}
+          {error && <ErrorText error={error} />}
         </div>
       ))}
     </div>
