@@ -9,6 +9,8 @@ const RadioButton = ({
   type,
   value,
   error,
+  hasInitialRenderPassed,
+  validateData,
 }: InputPropsT) => {
   return (
     <div key={name}>
@@ -20,7 +22,11 @@ const RadioButton = ({
             name={name}
             value={option.value}
             onChange={(e) => {
-              handleInputChange(e.target.name, e.target.value);
+              let err: string[] = [];
+              if (hasInitialRenderPassed) {
+                err = validateData(e.target.name, e.target.value);
+              }
+              handleInputChange(e.target.name, e.target.value, err);
             }}
             checked={value === option?.value}
           />

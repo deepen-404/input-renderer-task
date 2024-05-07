@@ -8,6 +8,8 @@ const Select = ({
   options,
   value,
   error,
+  hasInitialRenderPassed,
+  validateData,
 }: InputPropsT) => {
   return (
     <div key={name}>
@@ -15,7 +17,13 @@ const Select = ({
       <select
         name={name}
         value={value}
-        onChange={(e) => handleInputChange(name, e.target.value)}
+        onChange={(e) => {
+          let err: string[] = [];
+          if (hasInitialRenderPassed) {
+            err = validateData(e.target.name, e.target.value);
+          }
+          handleInputChange(e.target.name, e.target.value, err);
+        }}
       >
         {options?.map((option) => (
           <option key={option.value} value={option.value}>

@@ -1,3 +1,7 @@
+/*
+min lenth and max length are used for array and string
+min and max are used for number
+*/
 
 export type  RulesT = {
     required?: boolean;

@@ -9,6 +9,8 @@ const CheckBox = ({
   type,
   value: values,
   error,
+  hasInitialRenderPassed,
+  validateData,
 }: InputPropsT) => {
   const handleCheckbox = (value: string): string[] => {
     const existingValues = values || [];
@@ -34,7 +36,11 @@ const CheckBox = ({
             value={option.value}
             onChange={(e) => {
               const updatedValue = handleCheckbox(e.target.value);
-              handleInputChange(e.target.name, updatedValue);
+              let err: string[] = [];
+              if (hasInitialRenderPassed) {
+                err = validateData(e.target.name, updatedValue);
+              }
+              handleInputChange(e.target.name, updatedValue, err);
             }}
             checked={values.includes(option?.value)}
           />
