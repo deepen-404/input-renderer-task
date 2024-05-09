@@ -9,9 +9,41 @@ const CheckBox = ({
   type,
   value: values,
   error,
+  rules,
   hasInitialRenderPassed,
-  validateData,
 }: InputPropsT) => {
+  const validateData = (name: string, value: string | string[]): string[] => {
+    const error: string[] = [];
+    if (rules) {
+      if (rules.required) {
+        if (Array.isArray(value) && value.length === 0) {
+          error.push(`${name} is required`);
+        }
+      }
+
+      if (
+        rules.maxlength &&
+        Array.isArray(value) &&
+        value.length > rules.maxlength
+      ) {
+        error.push(
+          `${name} must have at most ${rules.maxlength} options selected`
+        );
+      }
+
+      if (
+        rules.minlength &&
+        Array.isArray(value) &&
+        value.length < rules.minlength
+      ) {
+        error.push(
+          `${name} must have at least ${rules.minlength} options selected`
+        );
+      }
+    }
+    return error;
+  };
+
   const handleCheckbox = (value: string): string[] => {
     const existingValues = values || [];
     const isChecked = existingValues.includes(value);

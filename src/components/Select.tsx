@@ -9,8 +9,19 @@ const Select = ({
   value,
   error,
   hasInitialRenderPassed,
-  validateData,
+  rules,
 }: InputPropsT) => {
+  const validateData = (name: string): string[] => {
+    const error: string[] = [];
+    if (rules) {
+      if (rules.required) {
+        if (!Array.isArray(value) && !value) {
+          error.push(`${name} is required`);
+        }
+      }
+    }
+    return error;
+  };
   return (
     <div key={name}>
       <label>{label}:</label>
@@ -20,7 +31,7 @@ const Select = ({
         onChange={(e) => {
           let err: string[] = [];
           if (hasInitialRenderPassed) {
-            err = validateData(e.target.name, e.target.value);
+            err = validateData(e.target.name);
           }
           handleInputChange(e.target.name, e.target.value, err);
         }}
