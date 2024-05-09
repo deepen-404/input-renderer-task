@@ -5,6 +5,8 @@ import CheckBox from "./CheckBox";
 import RadioButton from "./RadioButton";
 import Select from "./Select";
 
+const emptyErr = { error: [] };
+
 export type FormInputsT = {
   [key: string]: {
     error: string[];
@@ -23,26 +25,15 @@ const InputRenderer = () => {
     sethasInitialRenderPassed(true);
   }, []);
 
-  const [formInputs, setFormInputs] = useState<FormInputsT>(() =>
-    Schema.reduce((obj, field) => {
-      let value: string | string[] = "";
-      let rules: RulesT = {};
-
-      if (field.multipleDefaultValue) value = field.multipleDefaultValue;
-      else if (field.defaultValue) value = field.defaultValue;
-
-      if (field.rules) rules = { ...field.rules };
-
-      return {
-        ...obj,
-        [field.name]: {
-          error: [],
-          value,
-          rules,
-        },
-      };
-    }, {})
-  );
+  const [formInputs, setFormInputs] = useState<FormInputsT>({
+    email: { value: "email@email.com", ...emptyErr },
+    firstName: { value: "fname", ...emptyErr },
+    lastName: { value: "lastname", ...emptyErr },
+    gender: { value: "male", ...emptyErr },
+    age: { value: "20", ...emptyErr },
+    country: { value: "usa", ...emptyErr },
+    techStack: { value: ["react"], ...emptyErr },
+  });
 
   const handleInputChange = (
     name: string,
