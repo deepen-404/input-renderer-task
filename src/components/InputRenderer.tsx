@@ -1,17 +1,13 @@
 import React, { useEffect, useState } from "react";
-import Schema, { RulesT } from "../constants/Schema";
+import Schema from "../constants/Schema";
 import SimpleInput from "./SimpleInput";
 import CheckBox from "./CheckBox";
 import RadioButton from "./RadioButton";
 import Select from "./Select";
 
-const emptyErr = { error: [] };
-
 export type FormInputsT = {
   [key: string]: {
-    error: string[];
     value: string | string[];
-    rules?: RulesT;
   };
 };
 
@@ -26,36 +22,23 @@ const InputRenderer = () => {
   }, []);
 
   const [formInputs, setFormInputs] = useState<FormInputsT>({
-    email: { value: "email@email.com", ...emptyErr },
-    firstName: { value: "fname", ...emptyErr },
-    lastName: { value: "lastname", ...emptyErr },
-    gender: { value: "male", ...emptyErr },
-    age: { value: "20", ...emptyErr },
-    country: { value: "usa", ...emptyErr },
-    techStack: { value: ["react"], ...emptyErr },
+    email: { value: "email@email.com" },
+    firstName: { value: "fname" },
+    lastName: { value: "lastname" },
+    gender: { value: "male" },
+    age: { value: "20" },
+    country: { value: "usa" },
+    techStack: { value: ["react"] },
   });
 
-  const handleInputChange = (
-    name: string,
-    value: string | string[],
-    error: string[]
-  ) => {
+  const handleInputChange = (name: string, value: string | string[]) => {
     setFormInputs((prevState) => ({
       ...prevState,
-      [name]: { ...prevState[name], value, error },
+      [name]: { ...prevState[name], value },
     }));
   };
 
-  // const handleError = (name: string, err: string[]) => {
-  //   setFormInputs((prevState) => ({
-  //     ...prevState,
-  //     [name]: { ...prevState[name], error: [...prevState[name].error, ...err] },
-  //   }));
-  // };
-
-  const isValid = Object.keys(formInputs).every(
-    (key) => formInputs[key].error.length === 0
-  );
+  const isValid = true;
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -77,9 +60,7 @@ const InputRenderer = () => {
           ...item,
           key: item.name,
           value: formInputs[item.name].value,
-          error: formInputs[item.name].error,
           handleInputChange,
-          // handleError,
           hasInitialRenderPassed,
         };
         let Component;

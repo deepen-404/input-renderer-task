@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { InputPropsT } from "../types/InputPropsT";
 import ErrorText from "./ErrorText";
 
@@ -8,10 +9,9 @@ const SimpleInput = ({
   rules,
   value,
   handleInputChange,
-  error,
   hasInitialRenderPassed,
-}: // validateData,
-InputPropsT) => {
+}: InputPropsT) => {
+  const [error, setError] = useState<string[]>([]);
   const validateData = (name: string, value: string | string[]): string[] => {
     const error: string[] = [];
 
@@ -74,11 +74,10 @@ InputPropsT) => {
         name={name}
         value={value}
         onChange={(e) => {
-          let err: string[] = [];
           if (hasInitialRenderPassed) {
-            err = validateData(e.target.name, e.target.value);
+            setError(validateData(e.target.name, e.target.value));
           }
-          handleInputChange(e.target.name, e.target.value, err);
+          handleInputChange(e.target.name, e.target.value);
         }}
         disabled={rules?.disabled ?? false}
       />

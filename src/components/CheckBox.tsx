@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { InputPropsT } from "../types/InputPropsT";
 import ErrorText from "./ErrorText";
 
@@ -8,10 +9,11 @@ const CheckBox = ({
   options,
   type,
   value: values,
-  error,
   rules,
   hasInitialRenderPassed,
 }: InputPropsT) => {
+  const [error, setError] = useState<string[]>([]);
+
   const validateData = (name: string, value: string | string[]): string[] => {
     const error: string[] = [];
     if (rules) {
@@ -68,11 +70,10 @@ const CheckBox = ({
             value={option.value}
             onChange={(e) => {
               const updatedValue = handleCheckbox(e.target.value);
-              let err: string[] = [];
               if (hasInitialRenderPassed) {
-                err = validateData(e.target.name, updatedValue);
+                setError(validateData(e.target.name, updatedValue));
               }
-              handleInputChange(e.target.name, updatedValue, err);
+              handleInputChange(e.target.name, updatedValue);
             }}
             checked={values.includes(option?.value)}
           />

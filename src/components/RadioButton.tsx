@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { InputPropsT } from "../types/InputPropsT";
 import ErrorText from "./ErrorText";
 
@@ -8,10 +9,11 @@ const RadioButton = ({
   options,
   type,
   value,
-  error,
   hasInitialRenderPassed,
   rules,
 }: InputPropsT) => {
+  const [error, setError] = useState<string[]>([]);
+
   const validateData = (name: string): string[] => {
     const error: string[] = [];
     if (rules) {
@@ -34,11 +36,10 @@ const RadioButton = ({
             name={name}
             value={option.value}
             onChange={(e) => {
-              let err: string[] = [];
               if (hasInitialRenderPassed) {
-                err = validateData(e.target.name);
+                setError(validateData(e.target.name));
               }
-              handleInputChange(e.target.name, e.target.value, err);
+              handleInputChange(e.target.name, e.target.value);
             }}
             checked={value === option?.value}
           />
