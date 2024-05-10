@@ -62,7 +62,7 @@ const InputRenderer = () => {
     e.preventDefault();
 
     if (validateForm()) alert("Form submitted");
-    else alert("Invalid input");
+    else alert("Fill all fields properly");
   };
 
   // problem with JS, it shows the nested arrays without stringyfying the formInputs
