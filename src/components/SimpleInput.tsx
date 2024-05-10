@@ -10,8 +10,10 @@ const SimpleInput = ({
   value,
   handleInputChange,
   hasInitialRenderPassed,
+  changeValidity,
 }: InputPropsT) => {
   const [error, setError] = useState<string[]>([]);
+
   const validateData = (name: string, value: string | string[]): string[] => {
     const error: string[] = [];
 
@@ -75,7 +77,9 @@ const SimpleInput = ({
         value={value}
         onChange={(e) => {
           if (hasInitialRenderPassed) {
-            setError(validateData(e.target.name, e.target.value));
+            const errorArray = validateData(e.target.name, e.target.value);
+            changeValidity(e.target.name, errorArray.length > 0 ? false : true);
+            setError(errorArray);
           }
           handleInputChange(e.target.name, e.target.value);
         }}

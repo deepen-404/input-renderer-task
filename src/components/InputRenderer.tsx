@@ -11,15 +11,23 @@ export type FormInputsT = {
   };
 };
 
+type validateFormT = {
+  [key: string]: boolean;
+};
+
 const InputRenderer = () => {
   const [hasInitialRenderPassed, sethasInitialRenderPassed] = useState(false);
 
-  // in case where default values are not provided, or provided values are not valid
-  // we don't want to show the error messages, when the component first renders
-  // only after the first render passes, we want to show the error messages
-  useEffect(() => {
-    sethasInitialRenderPassed(true);
-  }, []);
+  // default values are provided so, for the first render the form is valid
+  const [isFormValid, setIsFormValid] = useState<validateFormT>({
+    email: true,
+    firstName: true,
+    lastName: true,
+    gender: true,
+    age: true,
+    country: true,
+    techStack: true,
+  });
 
   const [formInputs, setFormInputs] = useState<FormInputsT>({
     email: { value: "email@email.com" },
@@ -31,6 +39,13 @@ const InputRenderer = () => {
     techStack: { value: ["react"] },
   });
 
+  // in case where default values are not provided, or provided values are not valid
+  // we don't want to show the error messages, when the component first renders
+  // only after the first render passes, we want to show the error messages
+  useEffect(() => {
+    sethasInitialRenderPassed(true);
+  }, []);
+
   const handleInputChange = (name: string, value: string | string[]) => {
     setFormInputs((prevState) => ({
       ...prevState,
@@ -38,16 +53,16 @@ const InputRenderer = () => {
     }));
   };
 
-  const isValid = true;
+  const validateForm = () => Object.values(isFormValid).every((item) => item);
+
+  const changeValidity = (name: string, isValid: boolean) =>
+    setIsFormValid((prevState) => ({ ...prevState, [name]: isValid }));
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (isValid) {
-      alert("Form submitted");
-    } else {
-      alert("Invalid input");
-    }
+    if (validateForm()) alert("Form submitted");
+    else alert("Invalid input");
   };
 
   // problem with JS, it shows the nested arrays without stringyfying the formInputs
@@ -62,15 +77,16 @@ const InputRenderer = () => {
           value: formInputs[item.name].value,
           handleInputChange,
           hasInitialRenderPassed,
+          changeValidity,
         };
         let Component;
         if (
           item.type === "email" ||
           item.type === "text" ||
           item.type === "number"
-        ) {
+        )
           Component = SimpleInput;
-        } else if (item.type === "checkbox") Component = CheckBox;
+        else if (item.type === "checkbox") Component = CheckBox;
         else if (item.type === "radio") Component = RadioButton;
         else if (item.type === "select") Component = Select;
 

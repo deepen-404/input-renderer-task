@@ -10,6 +10,7 @@ const Select = ({
   value,
   hasInitialRenderPassed,
   rules,
+  changeValidity,
 }: InputPropsT) => {
   const [error, setError] = useState<string[]>([]);
 
@@ -32,7 +33,9 @@ const Select = ({
         value={value}
         onChange={(e) => {
           if (hasInitialRenderPassed) {
-            setError(validateData(e.target.name));
+            const errorArray = validateData(e.target.name);
+            changeValidity(e.target.name, errorArray.length > 0 ? false : true);
+            setError(errorArray);
           }
           handleInputChange(e.target.name, e.target.value);
         }}

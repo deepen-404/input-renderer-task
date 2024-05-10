@@ -11,6 +11,7 @@ const CheckBox = ({
   value: values,
   rules,
   hasInitialRenderPassed,
+  changeValidity,
 }: InputPropsT) => {
   const [error, setError] = useState<string[]>([]);
 
@@ -71,7 +72,12 @@ const CheckBox = ({
             onChange={(e) => {
               const updatedValue = handleCheckbox(e.target.value);
               if (hasInitialRenderPassed) {
-                setError(validateData(e.target.name, updatedValue));
+                const errorArray = validateData(e.target.name, updatedValue);
+                changeValidity(
+                  e.target.name,
+                  errorArray.length > 0 ? false : true
+                );
+                setError(errorArray);
               }
               handleInputChange(e.target.name, updatedValue);
             }}
