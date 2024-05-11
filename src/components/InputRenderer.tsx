@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Schema from "../constants/Schema";
 import SimpleInput from "./SimpleInput";
 import CheckBox from "./CheckBox";
@@ -19,7 +19,7 @@ const InputRenderer = () => {
   const [hasInitialRenderPassed, sethasInitialRenderPassed] = useState(false);
 
   // default values are provided so, for the first render the form is valid
-  const [isFormValid, setIsFormValid] = useState<validateFormT>({
+  const isFormValid = useRef<validateFormT>({
     email: true,
     firstName: true,
     lastName: true,
@@ -53,10 +53,15 @@ const InputRenderer = () => {
     }));
   };
 
-  const validateForm = () => Object.values(isFormValid).every((item) => item);
+  const validateForm = () =>
+    Object.values(isFormValid.current).every((item) => item);
 
-  const changeValidity = (name: string, isValid: boolean) =>
-    setIsFormValid((prevState) => ({ ...prevState, [name]: isValid }));
+  // const changeValidity = (name: string, isValid: boolean) =>
+  //   setIsFormValid((prevState) => ({ ...prevState, [name]: isValid }));
+
+  const changeValidity = (name: string, isValid: boolean) => {
+    isFormValid.current[name] = isValid;
+  };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
