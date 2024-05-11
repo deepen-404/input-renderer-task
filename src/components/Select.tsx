@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { InputPropsT } from "../types/InputPropsT";
 import ErrorText from "./ErrorText";
 
@@ -10,10 +9,9 @@ const Select = ({
   value,
   hasInitialRenderPassed,
   rules,
-  changeValidity,
+  errors,
+  handleErrors,
 }: InputPropsT) => {
-  const [error, setError] = useState<string[]>([]);
-
   const validateData = (name: string): string[] => {
     const error: string[] = [];
     if (rules) {
@@ -34,8 +32,7 @@ const Select = ({
         onChange={(e) => {
           if (hasInitialRenderPassed) {
             const errorArray = validateData(e.target.name);
-            changeValidity(e.target.name, errorArray.length > 0 ? false : true);
-            setError(errorArray);
+            handleErrors(e.target.name, errorArray);
           }
           handleInputChange(e.target.name, e.target.value);
         }}
@@ -46,7 +43,7 @@ const Select = ({
           </option>
         ))}
       </select>
-      {error && <ErrorText error={error} />}
+      {errors && <ErrorText error={errors} />}
     </div>
   );
 };

@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { InputPropsT } from "../types/InputPropsT";
 import ErrorText from "./ErrorText";
 
@@ -11,10 +10,9 @@ const CheckBox = ({
   value: values,
   rules,
   hasInitialRenderPassed,
-  changeValidity,
+  errors,
+  handleErrors,
 }: InputPropsT) => {
-  const [error, setError] = useState<string[]>([]);
-
   const validateData = (name: string, value: string | string[]): string[] => {
     const error: string[] = [];
     if (rules) {
@@ -73,11 +71,7 @@ const CheckBox = ({
               const updatedValue = handleCheckbox(e.target.value);
               if (hasInitialRenderPassed) {
                 const errorArray = validateData(e.target.name, updatedValue);
-                changeValidity(
-                  e.target.name,
-                  errorArray.length > 0 ? false : true
-                );
-                setError(errorArray);
+                handleErrors(e.target.name, errorArray);
               }
               handleInputChange(e.target.name, updatedValue);
             }}
@@ -86,7 +80,7 @@ const CheckBox = ({
           {option.label}
         </div>
       ))}
-      {error && <ErrorText error={error} />}
+      {errors && <ErrorText error={errors} />}
     </div>
   );
 };

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Schema from "../constants/Schema";
 import SimpleInput from "./SimpleInput";
 import CheckBox from "./CheckBox";
@@ -6,37 +6,34 @@ import RadioButton from "./RadioButton";
 import Select from "./Select";
 
 export type FormInputsT = {
-  [key: string]: {
-    value: string | string[];
-  };
+  [key: string]: string | string[];
 };
 
 type validateFormT = {
-  [key: string]: boolean;
+  [key: string]: string[];
 };
 
 const InputRenderer = () => {
   const [hasInitialRenderPassed, sethasInitialRenderPassed] = useState(false);
 
-  // default values are provided so, for the first render the form is valid
-  const isFormValid = useRef<validateFormT>({
-    email: true,
-    firstName: true,
-    lastName: true,
-    gender: true,
-    age: true,
-    country: true,
-    techStack: true,
+  const [formErrors, setFormErrors] = useState<validateFormT>({
+    email: [],
+    firstName: [],
+    lastName: [],
+    gender: [],
+    age: [],
+    country: [],
+    techStack: [],
   });
 
   const [formInputs, setFormInputs] = useState<FormInputsT>({
-    email: { value: "email@email.com" },
-    firstName: { value: "fname" },
-    lastName: { value: "lastname" },
-    gender: { value: "male" },
-    age: { value: "20" },
-    country: { value: "usa" },
-    techStack: { value: ["react"] },
+    email: "email@email.com",
+    firstName: "fname",
+    lastName: "lastname",
+    gender: "male",
+    age: "20",
+    country: "usa",
+    techStack: ["react"],
   });
 
   // in case where default values are not provided, or provided values are not valid
@@ -49,19 +46,19 @@ const InputRenderer = () => {
   const handleInputChange = (name: string, value: string | string[]) => {
     setFormInputs((prevState) => ({
       ...prevState,
-      [name]: { ...prevState[name], value },
+      [name]: value,
+    }));
+  };
+
+  const handleErrors = (name: string, errors: string[]) => {
+    setFormErrors((prevState) => ({
+      ...prevState,
+      [name]: errors,
     }));
   };
 
   const validateForm = () =>
-    Object.values(isFormValid.current).every((item) => item);
-
-  // const changeValidity = (name: string, isValid: boolean) =>
-  //   setIsFormValid((prevState) => ({ ...prevState, [name]: isValid }));
-
-  const changeValidity = (name: string, isValid: boolean) => {
-    isFormValid.current[name] = isValid;
-  };
+    Object.values(formErrors).every((err) => err.length === 0);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -71,7 +68,8 @@ const InputRenderer = () => {
   };
 
   // problem with JS, it shows the nested arrays without stringyfying the formInputs
-  // console.log(JSON.stringify(formInputs));
+  console.log(JSON.stringify(formInputs));
+  console.log(JSON.stringify(formErrors));
 
   return (
     <form onSubmit={(e) => handleSubmit(e)}>
@@ -79,10 +77,11 @@ const InputRenderer = () => {
         const props = {
           ...item,
           key: item.name,
-          value: formInputs[item.name].value,
+          value: formInputs[item.name],
           handleInputChange,
           hasInitialRenderPassed,
-          changeValidity,
+          handleErrors,
+          errors: formErrors[item.name],
         };
         let Component;
         if (
